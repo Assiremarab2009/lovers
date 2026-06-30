@@ -1,434 +1,99 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>imene's Flowers</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Dancing+Script:wght@700&display=swap');
+    <meta charset="UTF-8">
+    <title>For My Love</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+        
+        body { 
+            background: radial-gradient(circle, #2d004d, #10002b); 
+            font-family: 'Dancing Script', cursive; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            color: white; 
+            text-align: center;
+        }
 
-    * { margin:0; padding:0; box-sizing:border-box; }
+        #question-container { z-index: 10; transition: 0.5s; }
+        
+        #yesBtn { 
+            padding: 15px 30px; 
+            font-size: 20px; 
+            background: #9d4edd; 
+            color: white; 
+            border: none; 
+            border-radius: 50px; 
+            cursor: pointer; 
+            transition: 0.2s;
+            margin: 10px;
+        }
 
-    body {
-      background: radial-gradient(ellipse at 30% 40%, #4a0d8e 0%, #220840 50%, #0e021a 100%);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      font-family: 'Dancing Script', cursive;
-    }
+        #noBtn { 
+            padding: 15px 30px; 
+            font-size: 20px; 
+            background: #5a189a; 
+            color: #e0aaff; 
+            border: 2px solid #7b2cbf; 
+            border-radius: 50px; 
+            cursor: pointer;
+        }
 
-    h1 {
-      color: whitesmoke;
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      text-align: center;
-      padding: 18px 0 10px;
-      font-size: 2.4rem;
-      letter-spacing: 4px;
-      text-shadow: 0 0 30px rgba(255,150,220,0.9), 0 0 60px rgba(180,80,255,0.4);
-    }
-
-    /* ===== OVERLAY ===== */
-    .overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 99;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s;
-    }
-    .overlay.show { opacity: 1; pointer-events: all; }
-
-    /* ===== BANNER ===== */
-    .banner {
-      position: fixed;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%) scale(0);
-      z-index: 100;
-      width: 320px;
-      background: white;
-      border-radius: 24px;
-      padding: 36px 40px 28px;
-      text-align: center;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px rgba(200,100,255,0.3);
-      transition: transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
-      pointer-events: none;
-      overflow: hidden;
-    }
-    .banner.show {
-      transform: translate(-50%, -50%) scale(1);
-      pointer-events: all;
-    }
-
-    /* colored top bar */
-    .banner-topbar {
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 8px;
-      border-radius: 24px 24px 0 0;
-    }
-
-    .banner-emoji-row {
-      font-size: 1.8rem;
-      margin-bottom: 8px;
-      letter-spacing: 6px;
-    }
-
-    .banner-word {
-      font-family: 'Dancing Script', cursive;
-      font-size: 4rem;
-      font-weight: 700;
-      line-height: 1;
-      margin: 6px 0;
-    }
-
-    .banner-line {
-      height: 2px;
-      border-radius: 2px;
-      margin: 10px auto;
-      width: 60%;
-      opacity: 0.4;
-    }
-
-    .banner-sub {
-      font-family: 'Dancing Script', cursive;
-      font-size: 1.1rem;
-      color: #999;
-      letter-spacing: 2px;
-      margin-bottom: 10px;
-    }
-
-    .banner-hearts-row {
-      font-size: 1.5rem;
-      letter-spacing: 8px;
-      margin: 6px 0 14px;
-    }
-
-    .banner-deco-bottom {
-      font-size: 0.85rem;
-      color: #bbb;
-      letter-spacing: 3px;
-    }
-
-    .banner-close {
-      position: absolute;
-      top: 12px; right: 16px;
-      color: #ccc;
-      font-size: 1.2rem;
-      cursor: pointer;
-      font-family: sans-serif;
-      line-height: 1;
-    }
-    .banner-close:hover { color: #888; }
-
-    /* corner decorations */
-    .banner-corner {
-      position: absolute;
-      font-size: 1.3rem;
-      opacity: 0.6;
-    }
-    .bc-tl { top: 14px; left: 14px; transform: rotate(-20deg); }
-    .bc-bl { bottom: 14px; left: 14px; transform: rotate(20deg); }
-    .bc-br { bottom: 14px; right: 14px; transform: rotate(-20deg); }
-
-    /* ===== VASE WRAP ===== */
-    .vase-wrap {
-      position: relative;
-      width: 480px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .bouquet {
-      position: relative;
-      width: 440px;
-      height: 340px;
-    }
-
-    .stems { position:absolute; bottom:0; left:50%; transform:translateX(-50%); width:220px; height:220px; }
-    .stem-line { position:absolute; bottom:0; width:4px; background:linear-gradient(to top,#1a3d10,#3a8a1e); border-radius:2px; transform-origin:bottom center; }
-    .sl1{left:40px; height:185px; transform:rotate(-22deg);}
-    .sl2{left:70px; height:205px; transform:rotate(-8deg);}
-    .sl3{left:100px;height:215px; transform:rotate(0deg);}
-    .sl4{left:130px;height:200px; transform:rotate(10deg);}
-    .sl5{left:158px;height:180px; transform:rotate(23deg);}
-
-    .deco-leaf { position:absolute; width:52px; height:24px; background:linear-gradient(135deg,#3a8a28,#1e5010); border-radius:50% 0 50% 0; }
-    .dl1{bottom:255px;left:60px;  transform:rotate(-38deg);}
-    .dl2{bottom:235px;right:55px; transform:rotate(28deg) scaleX(-1);}
-    .dl3{bottom:210px;left:42px;  transform:rotate(-22deg);}
-    .dl4{bottom:220px;right:40px; transform:rotate(18deg) scaleX(-1);}
-
-    /* ===== ROSES ===== */
-    .rose {
-      position:absolute;
-      width:105px; height:105px;
-      cursor: pointer;
-      transition: transform 0.2s, filter 0.2s;
-    }
-    .rose:hover { transform: scale(1.12); filter: brightness(1.2); }
-    .rose:active { transform: scale(0.95); }
-
-    .r1{bottom:168px; left:10px;}
-    .r2{bottom:192px; left:82px;}
-    .r3{bottom:210px; left:165px;}
-    .r4{bottom:185px; left:240px;}
-    .r5{bottom:158px; left:308px;}
-
-    .petal { position:absolute; width:46px; height:60px; border-radius:50% 50% 40% 40%/60% 60% 40% 40%; transform-origin:bottom center; opacity:0.93; }
-    .mid   { width:37px; height:48px; }
-    .inner { width:27px; height:36px; }
-
-    .p1{top:24px;left:29px;transform:rotate(0deg)   translateY(-37px);}
-    .p2{top:24px;left:29px;transform:rotate(51deg)  translateY(-37px);}
-    .p3{top:24px;left:29px;transform:rotate(102deg) translateY(-37px);}
-    .p4{top:24px;left:29px;transform:rotate(153deg) translateY(-37px);}
-    .p5{top:24px;left:29px;transform:rotate(204deg) translateY(-37px);}
-    .p6{top:24px;left:29px;transform:rotate(255deg) translateY(-37px);}
-    .p7{top:24px;left:29px;transform:rotate(306deg) translateY(-37px);}
-    .pm1{top:33px;left:34px;transform:rotate(25deg)  translateY(-26px);}
-    .pm2{top:33px;left:34px;transform:rotate(97deg)  translateY(-26px);}
-    .pm3{top:33px;left:34px;transform:rotate(169deg) translateY(-26px);}
-    .pm4{top:33px;left:34px;transform:rotate(241deg) translateY(-26px);}
-    .pm5{top:33px;left:34px;transform:rotate(313deg) translateY(-26px);}
-    .pi1{top:41px;left:39px;transform:rotate(0deg)   translateY(-17px);}
-    .pi2{top:41px;left:39px;transform:rotate(72deg)  translateY(-17px);}
-    .pi3{top:41px;left:39px;transform:rotate(144deg) translateY(-17px);}
-    .pi4{top:41px;left:39px;transform:rotate(216deg) translateY(-17px);}
-    .pi5{top:41px;left:39px;transform:rotate(288deg) translateY(-17px);}
-
-    .center-bud { position:absolute; top:43px; left:42px; width:23px; height:23px; background:radial-gradient(ellipse at 40% 35%,#ffe566,#e6a800); border-radius:50%; box-shadow:0 0 8px rgba(255,220,0,0.8); }
-
-    .red    .petal{background:radial-gradient(ellipse at 40% 30%,#ff6b8a,#c0002e);}
-    .red    .mid  {background:radial-gradient(ellipse at 40% 30%,#ff4466,#980020);}
-    .red    .inner{background:radial-gradient(ellipse at 40% 30%,#ff2244,#7a0018);}
-    .white  .petal{background:radial-gradient(ellipse at 40% 30%,#ffffff,#dde8f0);}
-    .white  .mid  {background:radial-gradient(ellipse at 40% 30%,#f0f0f0,#c0d4e8);}
-    .white  .inner{background:radial-gradient(ellipse at 40% 30%,#e0e0e0,#b0c8dc);}
-    .pink   .petal{background:radial-gradient(ellipse at 40% 30%,#ffb3d1,#e0407a);}
-    .pink   .mid  {background:radial-gradient(ellipse at 40% 30%,#ff90bb,#cc2060);}
-    .pink   .inner{background:radial-gradient(ellipse at 40% 30%,#ff70a8,#aa1050);}
-    .purple .petal{background:radial-gradient(ellipse at 40% 30%,#cc88ff,#7700cc);}
-    .purple .mid  {background:radial-gradient(ellipse at 40% 30%,#bb66ee,#6600aa);}
-    .purple .inner{background:radial-gradient(ellipse at 40% 30%,#aa44dd,#550099);}
-    .orange .petal{background:radial-gradient(ellipse at 40% 30%,#ffcc66,#ff6600);}
-    .orange .mid  {background:radial-gradient(ellipse at 40% 30%,#ffaa33,#ee4400);}
-    .orange .inner{background:radial-gradient(ellipse at 40% 30%,#ff8800,#cc2200);}
-
-    /* ===== VASE ===== */
-    .vase { position:relative; width:260px; height:210px; margin-top:-50px; }
-
-    .vase-neck {
-      position:absolute; top:-26px; left:50%; transform:translateX(-50%);
-      width:155px; height:32px;
-      background:linear-gradient(135deg,rgba(255,255,255,0.4),rgba(200,160,255,0.25));
-      border:2px solid rgba(255,255,255,0.5);
-      border-bottom:none;
-      border-radius:16px 16px 0 0;
-    }
-
-    .vase-body {
-      position:absolute; bottom:16px; left:50%; transform:translateX(-50%);
-      width:240px; height:178px;
-      background:linear-gradient(135deg,
-        rgba(255,255,255,0.32) 0%,
-        rgba(160,110,255,0.18) 30%,
-        rgba(255,255,255,0.06) 55%,
-        rgba(160,110,255,0.22) 80%,
-        rgba(255,255,255,0.15) 100%
-      );
-      border:2px solid rgba(255,255,255,0.42);
-      border-radius:14px 14px 70px 70px;
-      backdrop-filter:blur(10px);
-      overflow:hidden;
-      box-shadow: 0 8px 32px rgba(120,50,200,0.3), inset 0 0 40px rgba(180,100,255,0.08);
-    }
-
-    .water {
-      position:absolute; bottom:0; left:0; right:0; height:40%;
-      background:linear-gradient(to bottom,rgba(140,80,255,0.1),rgba(90,40,180,0.35));
-      border-radius:0 0 68px 68px;
-    }
-
-    .love-text {
-      position:absolute;
-      font-family:'Dancing Script',cursive;
-      font-size:11px;
-      color:rgba(255,170,220,0.5);
-      pointer-events:none;
-      white-space:nowrap;
-    }
-    .lt1{top:12px;left:14px;  transform:rotate(-24deg); font-size:10px;}
-    .lt2{top:30px;left:100px; transform:rotate(14deg);  font-size:13px;}
-    .lt3{top:52px;left:25px;  transform:rotate(-11deg); font-size:9px;}
-    .lt4{top:22px;left:58px;  transform:rotate(32deg);  font-size:11px;}
-    .lt5{top:62px;left:128px; transform:rotate(-20deg); font-size:10px;}
-    .lt6{top:85px;left:55px;  transform:rotate(9deg);   font-size:14px;}
-    .lt7{top:46px;left:162px; transform:rotate(-27deg); font-size:9px;}
-    .lt8{top:98px;left:18px;  transform:rotate(21deg);  font-size:10px;}
-    .lt9{top:8px; left:148px; transform:rotate(-14deg); font-size:12px;}
-    .lt10{top:75px;left:88px; transform:rotate(-6deg);  font-size:11px;}
-    .lt11{top:110px;left:140px;transform:rotate(17deg); font-size:10px;}
-
-    .shine  { position:absolute; top:14px; left:16px;  width:22px; height:110px; background:linear-gradient(to bottom,rgba(255,255,255,0.52),transparent); border-radius:12px; transform:rotate(-8deg); }
-    .shine2 { position:absolute; top:12px; right:26px; width:10px; height:55px;  background:linear-gradient(to bottom,rgba(255,255,255,0.3),transparent); border-radius:10px; }
-    .shine3 { position:absolute; top:18px; left:45px;  width:6px;  height:35px;  background:linear-gradient(to bottom,rgba(255,255,255,0.2),transparent); border-radius:8px; transform:rotate(-4deg); }
-
-    .vase-dot { position:absolute; border-radius:50%; background:rgba(255,200,255,0.25); }
-    .vd1{width:6px;height:6px;  top:30px;left:190px;}
-    .vd2{width:4px;height:4px;  top:55px;left:20px;}
-    .vd3{width:5px;height:5px;  top:90px;left:195px;}
-    .vd4{width:3px;height:3px;  top:120px;left:30px;}
-
-    .vase-base {
-      position:absolute; bottom:0; left:50%; transform:translateX(-50%);
-      width:190px; height:20px;
-      background:linear-gradient(to right,rgba(255,255,255,0.06),rgba(255,255,255,0.28),rgba(255,255,255,0.06));
-      border:2px solid rgba(255,255,255,0.35);
-      border-radius:50%;
-    }
-
-    .sp { position:absolute; border-radius:50%; background:#fff; opacity:0; animation:twinkle 3s infinite; }
-    @keyframes twinkle { 0%,100%{opacity:0;transform:scale(0.4);}50%{opacity:1;transform:scale(1.6);} }
-  </style>
+        #flowers-container { display: none; width: 100%; }
+        
+        /* تصميم الورود البنفسجية */
+        .rose-box { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 50px; }
+        .rose-item { font-size: 50px; cursor: pointer; transition: 0.3s; }
+        .rose-item:hover { transform: scale(1.3); }
+    </style>
 </head>
 <body>
 
-<h1>For you babe&lt;3</h1>
-
-<div class="overlay" id="overlay" onclick="closeBanner()"></div>
-
-<div class="banner" id="banner">
-  <div class="banner-topbar" id="banner-topbar"></div>
-  <span class="banner-close" onclick="closeBanner()">✕</span>
-  <div class="banner-corner bc-tl" id="bc-tl">🌹</div>
-  <div class="banner-corner bc-bl" id="bc-bl">✦</div>
-  <div class="banner-corner bc-br" id="bc-br">✦</div>
-  <div class="banner-emoji-row" id="banner-emoji-row">🌹 🌹 🌹</div>
-  <div class="banner-word" id="banner-word">I</div>
-  <div class="banner-line" id="banner-line"></div>
-  <div class="banner-sub">I love you forever</div>
-  <div class="banner-hearts-row" id="banner-hearts-row">♡ ♡ ♡</div>
-  <div class="banner-deco-bottom">· · · ✦ · · ·</div>
+<div id="question-container">
+    <h1 id="question-text">My life is brighter with you. Will you be mine? 💜</h1>
+    <button id="yesBtn" onclick="showFlowers()">Yes!</button>
+    <button id="noBtn" onclick="nextNo()">No</button>
 </div>
 
-<div class="vase-wrap">
-  <div class="bouquet">
-
-    <div class="sp" style="width:3px;height:3px;top:8px;left:30px;animation-delay:0s"></div>
-    <div class="sp" style="width:4px;height:4px;top:3px;left:190px;animation-delay:0.7s"></div>
-    <div class="sp" style="width:3px;height:3px;top:20px;left:380px;animation-delay:1.3s"></div>
-    <div class="sp" style="width:2px;height:2px;top:48px;left:12px;animation-delay:2s"></div>
-    <div class="sp" style="width:3px;height:3px;top:38px;left:420px;animation-delay:0.4s"></div>
-    <div class="sp" style="width:2px;height:2px;top:65px;left:220px;animation-delay:1.8s"></div>
-
-    <div class="deco-leaf dl1"></div>
-    <div class="deco-leaf dl2"></div>
-    <div class="deco-leaf dl3"></div>
-    <div class="deco-leaf dl4"></div>
-
-    <div class="stems">
-      <div class="stem-line sl1"></div>
-      <div class="stem-line sl2"></div>
-      <div class="stem-line sl3"></div>
-      <div class="stem-line sl4"></div>
-      <div class="stem-line sl5"></div>
+<div id="flowers-container">
+    <h1>I love you forever! 🌹✨</h1>
+    <div class="rose-box">
+        <div class="rose-item">🌹</div>
+        <div class="rose-item">💜</div>
+        <div class="rose-item">🌸</div>
+        <div class="rose-item">💖</div>
+        <div class="rose-item">🌷</div>
     </div>
-
-    <!-- Red → I -->
-    <div class="rose r1 red" onclick="showBanner('I','#ff4466','🌹 🌹 🌹','♥ ♥ ♥','#ff4466','🌹')">
-      <div class="petal p1"></div><div class="petal p2"></div><div class="petal p3"></div>
-      <div class="petal p4"></div><div class="petal p5"></div><div class="petal p6"></div><div class="petal p7"></div>
-      <div class="petal mid pm1"></div><div class="petal mid pm2"></div><div class="petal mid pm3"></div><div class="petal mid pm4"></div><div class="petal mid pm5"></div>
-      <div class="petal inner pi1"></div><div class="petal inner pi2"></div><div class="petal inner pi3"></div><div class="petal inner pi4"></div><div class="petal inner pi5"></div>
-      <div class="center-bud"></div>
-    </div>
-
-    <!-- White → love -->
-    <div class="rose r2 white" onclick="showBanner('love','#88aaff','🤍 🤍 🤍','♡ ♡ ♡','#88aaff','🤍')">
-      <div class="petal p1"></div><div class="petal p2"></div><div class="petal p3"></div>
-      <div class="petal p4"></div><div class="petal p5"></div><div class="petal p6"></div><div class="petal p7"></div>
-      <div class="petal mid pm1"></div><div class="petal mid pm2"></div><div class="petal mid pm3"></div><div class="petal mid pm4"></div><div class="petal mid pm5"></div>
-      <div class="petal inner pi1"></div><div class="petal inner pi2"></div><div class="petal inner pi3"></div><div class="petal inner pi4"></div><div class="petal inner pi5"></div>
-      <div class="center-bud"></div>
-    </div>
-
-    <!-- Pink → you -->
-    <div class="rose r3 pink" onclick="showBanner('you','#ff70a8','🌸 🌸 🌸','❤ ❤ ❤','#ff70a8','🌸')">
-      <div class="petal p1"></div><div class="petal p2"></div><div class="petal p3"></div>
-      <div class="petal p4"></div><div class="petal p5"></div><div class="petal p6"></div><div class="petal p7"></div>
-      <div class="petal mid pm1"></div><div class="petal mid pm2"></div><div class="petal mid pm3"></div><div class="petal mid pm4"></div><div class="petal mid pm5"></div>
-      <div class="petal inner pi1"></div><div class="petal inner pi2"></div><div class="petal inner pi3"></div><div class="petal inner pi4"></div><div class="petal inner pi5"></div>
-      <div class="center-bud"></div>
-    </div>
-
-    <!-- Purple → for -->
-    <div class="rose r4 purple" onclick="showBanner('for','#aa44dd','💜 💜 💜','♥ ♥ ♥','#aa44dd','💜')">
-      <div class="petal p1"></div><div class="petal p2"></div><div class="petal p3"></div>
-      <div class="petal p4"></div><div class="petal p5"></div><div class="petal p6"></div><div class="petal p7"></div>
-      <div class="petal mid pm1"></div><div class="petal mid pm2"></div><div class="petal mid pm3"></div><div class="petal mid pm4"></div><div class="petal mid pm5"></div>
-      <div class="petal inner pi1"></div><div class="petal inner pi2"></div><div class="petal inner pi3"></div><div class="petal inner pi4"></div><div class="petal inner pi5"></div>
-      <div class="center-bud"></div>
-    </div>
-
-    <!-- Orange → ever -->
-    <div class="rose r5 orange" onclick="showBanner('ever','#ff8800','🧡 🧡 🧡','♡ ♡ ♡','#ff8800','🧡')">
-      <div class="petal p1"></div><div class="petal p2"></div><div class="petal p3"></div>
-      <div class="petal p4"></div><div class="petal p5"></div><div class="petal p6"></div><div class="petal p7"></div>
-      <div class="petal mid pm1"></div><div class="petal mid pm2"></div><div class="petal mid pm3"></div><div class="petal mid pm4"></div><div class="petal mid pm5"></div>
-      <div class="petal inner pi1"></div><div class="petal inner pi2"></div><div class="petal inner pi3"></div><div class="petal inner pi4"></div><div class="petal inner pi5"></div>
-      <div class="center-bud"></div>
-    </div>
-
-  </div>
-
-  <div class="vase">
-    <div class="vase-neck"></div>
-    <div class="vase-body">
-      <div class="water"></div>
-      <div class="shine"></div><div class="shine2"></div><div class="shine3"></div>
-      <div class="vase-dot vd1"></div><div class="vase-dot vd2"></div>
-      <div class="vase-dot vd3"></div><div class="vase-dot vd4"></div>
-      <div class="love-text lt1">love you</div>
-      <div class="love-text lt2">♡ love</div>
-      <div class="love-text lt3">you ♡</div>
-      <div class="love-text lt4">love you</div>
-      <div class="love-text lt5">♡</div>
-      <div class="love-text lt6">love you</div>
-      <div class="love-text lt7">you ♡</div>
-      <div class="love-text lt8">♡ love</div>
-      <div class="love-text lt9">love you</div>
-      <div class="love-text lt10">♡ you</div>
-      <div class="love-text lt11">love ♡</div>
-    </div>
-    <div class="vase-base"></div>
-  </div>
 </div>
 
 <script>
-  function showBanner(word, color, emojis, hearts, lineColor, cornerEmoji) {
-    document.getElementById('banner-word').textContent = word;
-    document.getElementById('banner-word').style.color = color;
-    document.getElementById('banner-topbar').style.background = color;
-    document.getElementById('banner-line').style.background = lineColor;
-    document.getElementById('banner-emoji-row').textContent = emojis;
-    document.getElementById('banner-hearts-row').textContent = hearts;
-    document.getElementById('banner-hearts-row').style.color = color;
-    document.getElementById('bc-tl').textContent = cornerEmoji;
-    document.getElementById('bc-bl').style.color = color;
-    document.getElementById('bc-br').style.color = color;
-    document.getElementById('banner').classList.add('show');
-    document.getElementById('overlay').classList.add('show');
-  }
-  function closeBanner() {
-    document.getElementById('banner').classList.remove('show');
-    document.getElementById('overlay').classList.remove('show');
-  }
+    let noCount = 0;
+    const noTexts = ["Why?", "You hate me?", "What!!", "Why did you do that!!!"];
+
+    function nextNo() {
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        
+        // تغيير نص زر No
+        if (noCount < noTexts.length) {
+            noBtn.innerText = noTexts[noCount];
+            noCount++;
+        }
+        
+        // تكبير زر Yes
+        let currentSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
+        yesBtn.style.fontSize = (currentSize + 15) + "px";
+        yesBtn.style.padding = (15 + noCount * 5) + "px " + (30 + noCount * 10) + "px";
+    }
+
+    function showFlowers() {
+        document.getElementById('question-container').style.display = 'none';
+        document.getElementById('flowers-container').style.display = 'block';
+    }
 </script>
 
 </body>
+</html>
